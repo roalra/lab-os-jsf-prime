@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head>
+</h:head> 
+<body> 
+<h:form id="formMember"> 
+	<p:panel id="basicPanel" header="Registro de personas" 
+	 style="margin-bottom:20px">
+	 
+         <p:messages id="msgs" />
+         
+        <h:panelGrid id="panelEdit" columns="3" cellpadding="10">
+        
+        	<p:outputLabel  value=""/>
+        	<p:outputLabel  value=""/>
+        	<h:inputHidden value="#{registroPrimeController.newMember.id}" />
+        
+	        <p:outputLabel for="idNombreMember" value="Nombre:"/>    
+	            
+	        <p:inputText 
+	        id="idNombreMember" 
+	        requiredMessage="El campo Nombre es obligatorio."
+	        value="#{registroPrimeController.newMember.name}" 
+	        required="true">
+	        </p:inputText> 
+	        
+	        <p:message for="idNombreMember" />
+	        
+	        
+	        <p:outputLabel for="idApp" value="Apellido:"/>        
+	        <p:inputText id="idApp" required="true" requiredMessage="El campo Apellido es obligatorio."
+	        value="#{registroPrimeController.newMember.apellido}">
+	        
+	        </p:inputText>   
+	        <p:message for="idApp" />
+	        
+	         <p:outputLabel for="email" value="Email:" />
+                <p:inputText id="email" value="#{registroPrimeController.newMember.email}" 
+                requiredMessage="El campo Email es obligatorio."/>
+                <p:message for="email"/>
+                
+                <p:outputLabel for="phoneNumber" value="Phone #:" />
+                <p:inputText id="phoneNumber" required="true" requiredMessage="El campo Phone es obligatorio."
+                    value="#{registroPrimeController.newMember.phoneNumber}" />
+                <p:message for="phoneNumber"  />       
+           
+        </h:panelGrid>
+        
+        <p:commandButton value="Guardar Miembro" 
+        action="#{registroPrimeController.register}" 
+        process="@this basicPanel"
+        id="iconOnly"  
+        icon="fa fa-fw fa-bed" 
+        title="Guardar" 
+        update="basicPanel idTablaMember msgs"/>
+        
+       
+        
+        
+    </p:panel>
+
+<p:dataTable id="idTablaMember"  var="meb" 
+value="#{registroPrimeController.memberLista}"
+paginator="true"
+rows="3"
+paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+rowsPerPageTemplate="3,6,9">
+    <p:column headerText="Id">
+        <h:outputText value="#{meb.id}" />
+    </p:column>
+ 
+    <p:column headerText="Nombre">
+        <h:outputText value="#{meb.name}" />
+    </p:column>
+ 
+    <p:column headerText="Apellido">
+        <h:outputText value="#{meb.apellido}" />
+    </p:column>
+ 
+    <p:column headerText="Email">
+        <h:outputText value="#{meb.email}" />
+    </p:column>
+    
+     <p:column headerText="Telefono">
+        <h:outputText value="#{meb.phoneNumber}" />
+    </p:column>
+    
+    <p:column headerText="Telefono">
+        <p:commandButton 
+        ajax="false" 
+        actionListener="#{registroPrimeController.remover(meb.id)}" 
+        value="Eliminar"
+        immediate="true">
+        </p:commandButton>
+                
+        <p:commandButton 
+        update=":formMember:panelEdit" 
+        process="@this"
+        immediate="true"
+       	value="Editar"
+       	actionListener="#{registroPrimeController.setNewMember(meb)}"
+       />
+       
+       <p:commandButton 
+       actionListener="#{registroPrimeController.setNewMember(meb)}"
+       update=":formMember:memeberDetail" 
+       process="@this"
+       oncomplete="PF('dlgDatosMember').show()" 
+       icon="ui-icon-search"
+       />
+       
+    </p:column>
+</p:dataTable>
+
+<p:dialog header="Modal Dialog" 
+widgetVar="dlgDatosMember" 
+modal="true" 
+height="100">
+<h:panelGroup >
+    <p:outputPanel 
+     id="memeberDetail"
+    style="text-align:center;">
+            <p:panelGrid  columns="2" 
+            columnClasses="label,value">
+                <f:facet name="header" >
+                    <p:outputLabel value="Detalles"/>
+                </f:facet>
+ 
+                <h:outputText value="Nombre:" />
+                <h:outputText value="#{registroPrimeController.newMember.name}" />
+ 
+               
+            </p:panelGrid>
+        </p:outputPanel>
+        </h:panelGroup>
+</p:dialog>
+</h:form>
+
+
+
+ 
+</body> 
+</html>
